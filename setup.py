@@ -7,6 +7,7 @@
 
 from setuptools import setup
 
+packages = []
 
 setup(name='mario',
       version='OctastyNopus',
@@ -16,7 +17,7 @@ setup(name='mario',
       author_email='m.lisle90@gmail.com',
       packages=['mario'],
       license='MIT',
-      install_requires=[],
+      install_requires=packages,
       extras_require={'visualize':  ["graphviz"]},
       python_requires='>=3.6',
       zip_safe=False)
