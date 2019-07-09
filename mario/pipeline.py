@@ -51,7 +51,7 @@ class Pipeline:
         """
         self.tasks = []
 
-    def run(self, config):
+    def run(self, config: Dict):
         """
         Example:
             config = {
@@ -155,7 +155,7 @@ class Output:
         directly.
     """
 
-    def __init__(self, func):
+    def __init__(self, func: Callable):
         self.function = func
 
     def get_output(self):
