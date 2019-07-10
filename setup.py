@@ -10,7 +10,7 @@ from setuptools import setup
 packages = []
 
 setup(name='mario',
-      version='OctastyNopus',
+      version='ParallelPrawn',
       description='A Data Engineering library',
       url='http://github.com/mitchelllisle/mario',
       author='Mitchell Lisle',
