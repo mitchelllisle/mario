@@ -62,7 +62,7 @@ def two(val):
 
 So here, we've introduced a dependency into our pipeline. We've added a `depends_on` argument to our `task` decorator. This ensures that our second task will always run after the first one in our pipeline. Now lets run this pipeline with two task.
 
-```
+```python3
 config = {
     "one": None,
     "two": {"val": 1}
