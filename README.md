@@ -115,3 +115,13 @@ Notice how here we've added a config object and we're passing that in to the `my
   ]
 }
 ```
+
+Now we'll revisit the second task in our pipeline. Instead of getting our output from the config directly, we instead may want to use the output of our first task in the second task. To do this, we can use `mario.Output`.  
+
+```python3
+config = {
+    "one": None,
+    "two": {"val": mario.Output(one)}
+}
+```
+As you can see above, all we have to do to achieve behaviour closer to dependant tasks being run is to change our config to read output from a task already in our Pipeline.
