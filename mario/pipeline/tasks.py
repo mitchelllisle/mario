@@ -4,14 +4,6 @@ from typing import Callable
 
 
 class Task:
-    def __init__(self, instance: Callable, depends_on=None):
-        self._func = instance
-        self.task_id = str(uuid4())
-        self.task_name = instance.__name__
-        self.status = None
-        self.output = {"data": None, "logs": None, "errors": None}
-        self.depends_on = None
-
     @property
     def SUCCEEDED(self):
         self.status = "SUCCEEDED"
@@ -28,15 +20,25 @@ class Task:
     def FAILED(self):
         self.status = "FAILED"
 
-    def collect_output(self):
+    def __init__(self, instance: Callable, depends_on: Callable = None):
+        self.PENDING
+        self._func = instance
+        self.task_id = str(uuid4())
+        self.task_name = instance.__name__
+        self.task_started = None
+        self.task_ended = None
+        self.task_duration_milliseconds = None
+        self.output = {"data": None, "logs": None, "errors": None}
+        self.depends_on = None
+
+    def as_dict(self):
         output = {
             "task_id": self.task_id,
             "task_name": self.task_name,
-            "task_depends_on": self.depends_on,
-            "status": self.status,
             "task_started": self.task_started,
             "task_ended": self.task_ended,
             "task_duration_milliseconds": self.task_duration_milliseconds,
+            "status": self.status,
             "output": self.output
         }
         return output
@@ -57,4 +59,4 @@ class Task:
             self.task_duration_milliseconds = (
                 ((task_end - task_start).microseconds) / 1000
             )
-            return self.collect_output()
+            return self.as_dict()
