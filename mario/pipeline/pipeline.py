@@ -11,24 +11,28 @@ class Pipeline:
         self.status = "SUCCEEDED"
 
     @property
-    def RUNNING(self):
-        self.status = "RUNNING"
+    def PENDING(self):
+        self.status = "PENDING"
 
     @property
     def FAILED(self):
         self.status = "FAILED"
 
-    def __init__(self, description: Text = None, hide_output=None):
+    def __init__(self, description: Text = None):
         """
         Pipeline
         This is a simple implementation currently that creates a list
         of tasks to run in sequence. The order is determined by tasks that
         'depend on' other tasks.
         """
+        self.PENDING
         self.tasks = []
         self.pipeline_id = str(uuid4())
         self.description = description
         self.pipeline_created = dt.datetime.now().isoformat()
+        self.pipeline_started = "Not Started"
+        self.pipeline_ended = "Not Started"
+        self.total_tasks = 0
 
     def as_dict(self):
         output = {
@@ -62,10 +66,11 @@ class Pipeline:
         if depends_on:
             order_in_pipeline = self.tasks.index(depends_on) + 1
 
-        def build_function(instance: Callable, depends_one: Callable = None) -> Dict:
+        def build_function(instance: Callable) -> Dict:
             func_meta = Task(instance, depends_on)
 
             self.tasks.insert(order_in_pipeline, func_meta)
+            self.total_tasks += 1
             return func_meta
         return build_function
 
@@ -80,13 +85,10 @@ class Pipeline:
                         parsed_config[arg] = val
             return parsed_config
 
-        total_tasks = len(self.tasks)
         pipeline_start = dt.datetime.now()
-
-        self.total_tasks = total_tasks
         self.pipeline_started = pipeline_start.isoformat()
 
-        for i in range(total_tasks):
+        for i in range(self.total_tasks):
             parsed_config = build_config(
                 task_config=config[self.tasks[i].task_name]
             )

@@ -29,7 +29,7 @@ class Task:
         self.task_ended = None
         self.task_duration_milliseconds = None
         self.output = {"data": None, "logs": None, "errors": None}
-        self.depends_on = None
+        self.depends_on = None if depends_on is None else depends_on.task_name
 
     def as_dict(self):
         output = {
@@ -39,7 +39,8 @@ class Task:
             "task_ended": self.task_ended,
             "task_duration_milliseconds": self.task_duration_milliseconds,
             "status": self.status,
-            "output": self.output
+            "output": self.output,
+            "depends_on": self.depends_on
         }
         return output
 
