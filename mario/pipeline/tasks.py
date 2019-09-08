@@ -4,24 +4,9 @@ from typing import Callable
 
 
 class Task:
-    @property
-    def SUCCEEDED(self):
-        self.status = "SUCCEEDED"
-
-    @property
-    def RUNNING(self):
-        self.status = "RUNNING"
-
-    @property
-    def PENDING(self):
+    def __init__(self, instance: Callable, description: str, depends_on: Callable = None):
         self.status = "PENDING"
-
-    @property
-    def FAILED(self):
-        self.status = "FAILED"
-
-    def __init__(self, instance: Callable, depends_on: Callable = None):
-        self.PENDING
+        self.description = description
         self._func = instance
         self.task_id = str(uuid4())
         self.task_name = instance.__name__
@@ -45,19 +30,19 @@ class Task:
         return output
 
     def run_task(self, **kwargs):
+        task_start = dt.datetime.now()
         try:
-            self.RUNNING
-            task_start = dt.datetime.now()
+            self.status = "RUNNING"
             self.task_started = task_start.isoformat()
             self.output['data'] = self._func(**kwargs)
-            self.SUCCEEDED
-        except Exception as e:
-            self.FAILED
-            self.output['errors'] = e
+            self.status = "SUCCEEDED"
+        except Exception as err:
+            self.status = "FAILED"
+            self.output['errors'] = str(err)
         finally:
             task_end = dt.datetime.now()
             self.task_ended = task_end.isoformat()
             self.task_duration_milliseconds = (
-                ((task_end - task_start).microseconds) / 1000
+                    (task_end - task_start).microseconds / 1000
             )
             return self.as_dict()

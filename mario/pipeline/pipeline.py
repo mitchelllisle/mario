@@ -6,18 +6,6 @@ from mario.pipeline.utils import Output
 
 
 class Pipeline:
-    @property
-    def SUCCEEDED(self):
-        self.status = "SUCCEEDED"
-
-    @property
-    def PENDING(self):
-        self.status = "PENDING"
-
-    @property
-    def FAILED(self):
-        self.status = "FAILED"
-
     def __init__(self, description: Text = None):
         """
         Pipeline
@@ -25,7 +13,7 @@ class Pipeline:
         of tasks to run in sequence. The order is determined by tasks that
         'depend on' other tasks.
         """
-        self.PENDING
+        self.status = "PENDING"
         self.tasks = []
         self.pipeline_id = str(uuid4())
         self.description = description
@@ -33,6 +21,8 @@ class Pipeline:
         self.pipeline_started = "Not Started"
         self.pipeline_ended = "Not Started"
         self.total_tasks = 0
+        self.error_caused_by = None
+        self.pipeline_duration_milliseconds = 0
 
     def as_dict(self):
         output = {
@@ -66,8 +56,8 @@ class Pipeline:
         if depends_on:
             order_in_pipeline = self.tasks.index(depends_on) + 1
 
-        def build_function(instance: Callable) -> Dict:
-            func_meta = Task(instance, depends_on)
+        def build_function(instance: Callable) -> Task:
+            func_meta = Task(instance=instance, description=description, depends_on=depends_on)
 
             self.tasks.insert(order_in_pipeline, func_meta)
             self.total_tasks += 1
@@ -76,14 +66,14 @@ class Pipeline:
 
     def run(self, config: Dict):
         def build_config(task_config: Dict) -> Dict:
-            parsed_config = {}
+            working_config = {}
             if task_config is not None:
                 for arg, val in task_config.items():
                     if type(val) is Output:
-                        parsed_config[arg] = val.get_output()
+                        working_config[arg] = val.get_output()
                     else:
-                        parsed_config[arg] = val
-            return parsed_config
+                        working_config[arg] = val
+            return working_config
 
         pipeline_start = dt.datetime.now()
         self.pipeline_started = pipeline_start.isoformat()
@@ -95,16 +85,16 @@ class Pipeline:
 
             output_from_task = self.tasks[i].run_task(**parsed_config)
             if output_from_task['status'] == "SUCCEEDED":
-                self.SUCCEEDED
+                self.status = "SUCCEEDED"
                 continue
             else:
-                self.FAILED
+                self.status = "FAILED"
                 self.error_caused_by = self.tasks[i].task_name
                 break
 
         pipeline_end = dt.datetime.now()
         self.pipeline_ended = pipeline_end.isoformat()
         self.pipeline_duration_milliseconds = (
-            ((pipeline_end - pipeline_start).microseconds) / 1000
+                (pipeline_end - pipeline_start).microseconds / 1000
         )
         return self.as_dict()
