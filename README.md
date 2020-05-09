@@ -21,5 +21,5 @@ if __name__ == "__main__":
     with Pipeline(registry) as p:
         p.run(job)
 
-    print(p.results)
+    print(p.result)
 ```

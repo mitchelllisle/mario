@@ -3,6 +3,7 @@ from inspect import signature
 import datetime as dt
 from dataclasses import dataclass
 from typing import Any, Optional
+from mario.util import Status
 
 
 @dataclass()
@@ -28,7 +29,7 @@ class DoFn(ABC):
         self.runs = 0
         self.time_started = None
         self.time_ended = None
-        self.status = "NOT STARTED"
+        self.status = Status.NOT_STARTED
 
     def collect_output(self):
         stage_output = {
@@ -58,10 +59,10 @@ class DoFn(ABC):
             self.logs.append({"message": f"starting {self.name}"})
             self.time_started = dt.datetime.utcnow()
             self.__result__ = self.run(**self.kwargs)
-            self.status = "SUCCEEDED"
+            self.status = Status.SUCCEESS
         except Exception as e:
             self.errors.append(e.__str__())
-            self.status = "ERROR"
+            self.status = Status.FAIL
             raise
         finally:
             self.time_ended = dt.datetime.utcnow()

@@ -21,6 +21,12 @@ class Registry:
         self._wrapped_iter = iter(self.__funcs__)
         return self
 
+    def __getattr__(self, item):
+        try:
+            return self.__funcs__[item]
+        except KeyError:
+            raise UndefinedStepError(f"The Step you are trying to access does not exist: {item}")
+
     def __getitem__(self, key: str):
         try:
             return self.__funcs__[key]
