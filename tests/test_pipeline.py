@@ -25,7 +25,7 @@ def test_pipeline():
 
     job = [
         FnConfig(fn="SuccessFn", name="StepTwo", args={"val": 2}),
-        FnConfig(fn=registry.SuccessFn, name="StepOne", args={"val": ArgChain("StpTwo")})
+        FnConfig(fn=registry.SuccessFn, name="StepOne", args={"val": ArgChain("StepTwo")})
     ]
 
     with Pipeline(registry=registry, sink=mongo) as p:
