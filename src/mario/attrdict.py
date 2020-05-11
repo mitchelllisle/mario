@@ -11,7 +11,7 @@ class AttrDict(dict):
         return self[k]
 
     def __setitem__(self, k: str, v: Any):
-        if type(v) == dict:
+        if isinstance(v, dict):
             v = AttrDict(**v)
         super().__setitem__(k, v)
 
