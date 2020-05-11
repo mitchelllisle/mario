@@ -1,10 +1,10 @@
 name: Mario Build
 
 on:
-  push:
+  pull_request:
     branches:
-    - master
-    - release/*
+      - master
+      - release/*
 
 jobs:
   build:
