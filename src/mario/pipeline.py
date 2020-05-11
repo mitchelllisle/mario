@@ -4,7 +4,7 @@ from uuid import uuid4
 from mario.funcs import FnConfig, DoFn
 from mario.util import Status
 from collections import deque
-from mario.sinks import Sink
+from mario.sinks.base import Sink
 
 
 class Pipeline:
