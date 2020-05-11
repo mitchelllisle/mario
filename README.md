@@ -41,14 +41,14 @@ from mario.sinks.mongo import MongoSink
 
 ...
 
-sink = MongoSink(
+mongo = MongoSink(
         host="localhost",
         port=27017,
         username="root",
         password="root"
     )
 
-with Pipeline(registry=registry) as p:
+with Pipeline(registry=registry, sink=mongo) as p:
     p.run(job)
 
 ```
