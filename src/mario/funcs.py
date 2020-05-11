@@ -25,7 +25,6 @@ class DoFn(ABC):
         self.kwargs = None
         self.errors = []
         self.__result__ = None
-        self.logs = []
         self.runs = 0
         self.time_started = None
         self.time_ended = None
@@ -36,7 +35,6 @@ class DoFn(ABC):
             "step": self.__class__.__name__,
             "name": self.name,
             "status": self.status,
-            "logs": self.logs,
             "errors": self.errors,
             "times_run": self.runs,
             "time_started": self.time_started.isoformat() if self.time_started else None,
@@ -46,7 +44,6 @@ class DoFn(ABC):
         return stage_output
 
     def attach_args(self, **kwargs):
-        self.logs.append({"message": f"collecting arguments for {self.name}"})
         self.kwargs = kwargs
 
     @abstractmethod
@@ -56,16 +53,15 @@ class DoFn(ABC):
     def __call__(self, **kwargs):
         try:
             self.attach_args(**kwargs)
-            self.logs.append({"message": f"starting {self.name}"})
             self.time_started = dt.datetime.utcnow()
             self.__result__ = self.run(**self.kwargs)
             self.status = Status.SUCCEESS
-        except Exception as e:
-            self.errors.append(e.__str__())
+        except Exception as err:
+            self.errors.append(err.__str__())
             self.status = Status.FAIL
             raise
         finally:
             self.time_ended = dt.datetime.utcnow()
             self.runs += 1
-            self.logs.append({"message": f"{self.name} finished"})
+        return self.status
 

@@ -1,4 +1,14 @@
 from mario import Pipeline, Registry, FnConfig, DoFn
+from mario.sinks.mongo import MongoSink
+
+sink = MongoSink(
+        host="localhost",
+        port=27017,
+        username="root",
+        password="root",
+        collection="executions",
+        database="mario"
+    )
 
 
 def test_pipeline():
@@ -11,19 +21,12 @@ def test_pipeline():
             raise KeyError("a")
 
     registry = Registry()
-    registry.register(
-        [
-            SuccessFn,
-            FailFn
-        ]
-    )
+    registry.register([SuccessFn, FailFn])
 
     job = [
-        FnConfig(fn=registry.SuccessFn, name="StepOne", args={"val": 1}),
-        FnConfig(fn="FailFn", name="StepTwo", args={"val": 2})
+        FnConfig(fn="FailFn", name="StepTwo", args={"val": 2}),
+        FnConfig(fn=registry.SuccessFn, name="StepOne", args={"val": 1})
     ]
 
-    with Pipeline(registry) as p:
+    with Pipeline(registry=registry) as p:
         p.run(job)
-
-    print(p.result)

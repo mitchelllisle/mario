@@ -3,3 +3,4 @@ class Status:
     FAIL = "FAILED"
     SUCCEESS = "SUCCEEDED"
     NOT_STARTED = "NOT STARTED"
+    RUNNING = "RUNNING"
