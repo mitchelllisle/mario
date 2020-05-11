@@ -1,7 +1,7 @@
-from mario import Pipeline, Registry, FnConfig, DoFn
+from mario import Pipeline, Registry, FnConfig, DoFn, ArgChain
 from mario.sinks.mongo import MongoSink
 
-sink = MongoSink(
+mongo = MongoSink(
         host="localhost",
         port=27017,
         username="root",
@@ -24,9 +24,9 @@ def test_pipeline():
     registry.register([SuccessFn, FailFn])
 
     job = [
-        FnConfig(fn="FailFn", name="StepTwo", args={"val": 2}),
-        FnConfig(fn=registry.SuccessFn, name="StepOne", args={"val": 1})
+        FnConfig(fn="SuccessFn", name="StepTwo", args={"val": 2}),
+        FnConfig(fn=registry.SuccessFn, name="StepOne", args={"val": ArgChain("StpTwo")})
     ]
 
-    with Pipeline(registry=registry) as p:
+    with Pipeline(registry=registry, sink=mongo) as p:
         p.run(job)
