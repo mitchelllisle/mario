@@ -1,6 +1,5 @@
-from mario.sinks import Sink
+from mario.sinks.base import Sink
 from pymongo import MongoClient
-from pymongo.errors import ConnectionFailure
 from pymongo.results import InsertOneResult
 from mario.pipeline import Pipeline
 
