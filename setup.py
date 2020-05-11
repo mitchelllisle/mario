@@ -18,7 +18,7 @@ setup(
     description="A configurable data pipeline library.",
     install_requires=requirements,
     keywords='mario',
-    name='mario',
+    name='mario-python',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     test_suite='tests',

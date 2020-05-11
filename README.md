@@ -3,7 +3,7 @@
 ### Install
 
 ```
-pip install mario
+pip install mario-python
 ```
 
 ```python
@@ -32,7 +32,7 @@ if __name__ == "__main__":
 #### MongoDB
 
 ```
-pip install mario[mongo]
+pip install mario-python[mongo]
 ```
 
 ```python
