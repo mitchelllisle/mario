@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from mario.sinks.mongo import MongoSink
 
 
 class Sink:

@@ -1,6 +1,10 @@
 ![Artboard](https://user-images.githubusercontent.com/18128531/60772395-a2c4a380-a0ed-11e9-82ed-ad572f1e1edd.png)
 
-Example
+### Install
+
+```
+pip install mario
+```
 
 ```python
 from mario import Pipeline, Registry, FnConfig, DoFn
@@ -22,4 +26,29 @@ if __name__ == "__main__":
         p.run(job)
 
     print(p.result)
+```
+
+### Sinks
+#### MongoDB
+
+```
+pip install mario[mongo]
+```
+
+```python
+from mario import Pipeline
+from mario.sinks.mongo import MongoSink
+
+...
+
+sink = MongoSink(
+        host="localhost",
+        port=27017,
+        username="root",
+        password="root"
+    )
+
+with Pipeline(registry=registry) as p:
+    p.run(job)
+
 ```

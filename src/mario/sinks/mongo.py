@@ -9,7 +9,7 @@ class MongoSink(Sink):
     """MongoSink
     Very basic Mongo connection and insert capability
     """
-    def __init__(self, host: str, port: int, database: str, collection: str, **kwargs):
+    def __init__(self, host: str, port: int, database: str ="mario", collection: str = "executions", **kwargs):
         super().__init__(name="Mongo")
         self.database = database
         self.collection = collection
