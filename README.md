@@ -1,5 +1,6 @@
 ![Artboard](https://user-images.githubusercontent.com/18128531/60772395-a2c4a380-a0ed-11e9-82ed-ad572f1e1edd.png)
 
+![Mario Build](https://github.com/mitchelllisle/mario/workflows/Mario%20Build/badge.svg?branch=master)
 [![PyPI version](https://badge.fury.io/py/mario-python.svg)](https://badge.fury.io/py/mario-python)
 
 ### Install
