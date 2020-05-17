@@ -23,7 +23,5 @@ class MongoSink(Sink):
 
     def write(self, record: Dict, collection: str = "executions") -> InsertOneResult:
         _collection = self._database[collection]
-
-        _collection.create_index("id")
         object_id = _collection.insert_one(record)
         return object_id
