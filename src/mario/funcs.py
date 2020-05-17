@@ -4,10 +4,10 @@ import datetime as dt
 from dataclasses import dataclass
 from typing import Any, Optional
 from mario.util import Status
+from pydantic import BaseModel
 
 
-@dataclass()
-class FnConfig:
+class FnConfig(BaseModel):
     fn: str
     name: str
     args: Any
