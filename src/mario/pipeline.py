@@ -30,7 +30,7 @@ class Pipeline:
         self.determine_status()
         self.result = self.collect_output()
         if self.sink:
-            self.sink.write(self)
+            self.sink.write(self.result)
 
     def determine_status(self):
         statuses = [step["status"] for step in self.steps]

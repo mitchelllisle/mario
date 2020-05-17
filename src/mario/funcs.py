@@ -2,16 +2,9 @@ from abc import ABC, abstractmethod
 from inspect import signature
 import datetime as dt
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any, Optional, Union, Type
 from mario.util import Status
 from pydantic import BaseModel
-
-
-class FnConfig(BaseModel):
-    fn: str
-    name: str
-    args: Any
-    description: Optional[str] = None
 
 
 class DoFn(ABC):
@@ -65,3 +58,9 @@ class DoFn(ABC):
             self.runs += 1
         return self.status
 
+
+class FnConfig(BaseModel):
+    fn: Union[str, Type[DoFn]]
+    name: str
+    args: Any
+    description: Optional[str] = None
