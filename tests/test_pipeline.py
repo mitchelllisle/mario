@@ -6,7 +6,6 @@ mongo = MongoSink(
         port=27017,
         username="root",
         password="root",
-        collection="executions",
         database="mario"
     )
 
