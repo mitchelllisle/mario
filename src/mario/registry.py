@@ -45,7 +45,7 @@ class Registry:
         )
 
         for k, v in args.parameters.items():
-            if k is not 'self':
+            if k != 'self':
                 out["args"].append({k: str(v.annotation)})
         return out
 
