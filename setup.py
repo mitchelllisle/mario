@@ -27,6 +27,6 @@ setup(
         "mongo": ["pymongo==3.10.1"]
     },
     url='https://github.com/mitchelllisle/mario',
-    version='1.5.0',
+    version='1.6.0',
     zip_safe=False,
 )
