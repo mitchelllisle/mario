@@ -1,6 +1,6 @@
 from mario.sinks.base import Sink
 from pymongo import MongoClient
-from pymongo.results import InsertOneResult
+from pymongo.results import InsertOneResult, UpdateResult
 from typing import Dict, Optional
 
 
@@ -24,4 +24,10 @@ class MongoSink(Sink):
     def write(self, record: Dict, collection: str = "executions") -> InsertOneResult:
         _collection = self._database[collection]
         object_id = _collection.insert_one(record)
+        return object_id
+
+    def update(self, query: Dict, record: Dict, collection: str = "executions") -> UpdateResult:
+        _collection = self._database[collection]
+        document = {"$set": record}
+        object_id = _collection.update_one(query, document)
         return object_id
