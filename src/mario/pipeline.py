@@ -6,6 +6,7 @@ from mario.util import Status
 from collections import deque
 from mario.sinks.base import Sink
 from mario.chaining import ArgChain
+import datetime as dt
 
 
 class Pipeline:
@@ -27,6 +28,7 @@ class Pipeline:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        self.time_ended = dt.datetime.utcnow()
         self.determine_status()
         self.result = self.collect_output()
         if self.sink:
@@ -44,7 +46,10 @@ class Pipeline:
             "id": self.id,
             "errors": self.errors,
             "status": self.status,
-            "steps": self.steps
+            "steps": self.steps,
+            "duration": sum([x["duration"] for x in self.steps]),
+            "started": self.time_started.strftime("%Y-%m-%dT%H:%m:%s"),
+            "ended": self.time_ended.strftime("%Y-%m-%dT%H:%m:%s")
         }
 
     def _resolve_fn_location(self, fn: Union[str, Type[DoFn]]):
@@ -71,6 +76,7 @@ class Pipeline:
         return args
 
     def run(self, configs: List[FnConfig]):
+        self.time_started = dt.datetime.utcnow()
         self._configs = configs
         queue = self._prepare_funcs()
         self.status = Status.RUNNING
